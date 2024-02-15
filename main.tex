@@ -1,0 +1,712 @@
+%-------------------------------------------------------------------------------------------------------------------------------------------%
+%	The MIT License (MIT)
+%
+%	Copyright (c) 2015 Jan Küster
+%
+%	Permission is hereby granted, free of charge, to any person obtaining a copy
+%	of this software and associated documentation files (the "Software"), to deal
+%	in the Software without restriction, including without limitation the rights
+%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+%	copies of the Software, and to permit persons to whom the Software is
+%	furnished to do so, subject to the following conditions:
+%	
+%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+%	THE SOFTWARE.
+%	
+%
+%-------------------------------------------------------------------------------------------------------------------------------------------%
+
+% article class (full customization, no cv template)
+\documentclass[10pt,A4]{article}	
+
+% use utf8
+\usepackage[utf8]{inputenc}		
+
+%----------------------------------------------------------------------------------------
+%	LOGIC
+%----------------------------------------------------------------------------------------
+
+% provides \isempty test
+\usepackage{xifthen}
+
+%----------------------------------------------------------------------------------------
+%	FONT
+%----------------------------------------------------------------------------------------
+
+% some tex-live fonts - choose your own
+
+%\usepackage[defaultsans]{droidsans}
+%\usepackage[default]{comfortaa}
+%\usepackage{cmbright}
+\usepackage[default]{raleway}
+%\usepackage{fetamont}
+%\usepackage[default]{gillius}
+%\usepackage[light,math]{iwona}
+%\usepackage[thin]{roboto} 
+
+% set font default
+\renewcommand*\familydefault{\sfdefault} 	
+\usepackage[T1]{fontenc}
+\usepackage{arev}
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+% more font size definitions
+\usepackage{moresize}		
+
+
+%----------------------------------------------------------------------------------------
+%	PAGE LAYOUT  DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+%debug page outer frames
+%\usepackage{showframe}			
+
+
+%define page styles using geometry
+\usepackage[a4paper]{geometry}		
+
+% margins
+\geometry{top=1cm, bottom=0.5cm, left=1.5cm, right=1.5cm} 	
+
+%use customized header
+\usepackage{fancyhdr}				
+\pagestyle{fancy}
+
+%less space between header and content
+\setlength{\headheight}{-5pt}		
+
+%customize entries left, center and right
+%\lhead{}
+%\chead{ \small{Antonio Di Salvo  $\cdot$ IT Consultant $\cdot$  Milan, Italy  $\cdot$  %\textcolor{black}{\textbf{disalvo.antonio@gmail.com}}  $\cdot$ +39 389 470 91 58}}
+%\rhead{}
+
+%indentation is zero
+\setlength{\parindent}{0mm}
+
+%----------------------------------------------------------------------------------------
+%	TABLE /ARRAY DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+
+%for layouting tables
+\usepackage{multicol}			
+\usepackage{multirow}
+
+%extended aligning of tabular cells
+\usepackage{array}
+
+\newcolumntype{x}[1]{%
+>{\raggedleft\hspace{0pt}}p{#1}}%
+
+
+%----------------------------------------------------------------------------------------
+%	GRAPHICS DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+
+%for header image
+\usepackage{graphicx}
+
+%for floating figures
+\usepackage{wrapfig}
+\usepackage{float}
+%\floatstyle{boxed} 
+%\restylefloat{figure}
+
+%for drawing graphics		
+\usepackage{tikz}				
+\usetikzlibrary{shapes, backgrounds,mindmap, trees}
+
+
+%----------------------------------------------------------------------------------------
+%	Color DEFINITIONS
+%---------------------------------------------------------------------------------------- 
+
+\usepackage{color}
+
+%accent color
+\definecolor{mycol}{RGB}{233,255,255}
+
+%accent color
+\definecolor{sectcol}{RGB}{255,255,236}
+
+%dark background color
+\definecolor{bgcol}{RGB}{136,137,199}
+
+%light background / accent color
+\definecolor{softcol}{RGB}{233,255,255}
+
+
+%============================================================================%
+%	DEFINITIONS
+%============================================================================%
+
+%----------------------------------------------------------------------------------------
+% 	HEADER
+%----------------------------------------------------------------------------------------
+
+% remove top header line
+\renewcommand{\headrulewidth}{0pt} 
+
+%remove botttom header line
+\renewcommand{\footrulewidth}{0pt}	  	
+
+%remove pagenum
+\renewcommand{\thepage}{}	
+
+%remove section num		
+\renewcommand{\thesection}{}			
+
+%----------------------------------------------------------------------------------------
+% 	ARROW GRAPHICS in Tikz
+%----------------------------------------------------------------------------------------
+
+\newcommand{\fancysep}{\textcolor{bgcol}{ $\cdot$} }
+
+% a six pointed arrow poiting to the left
+\newcommand{\tzlarrow}{(0,0) -- (0.2,0) -- (0.3,0.2) -- (0.2,0.4) -- (0,0.4) -- (0.1,0.2) -- cycle;}	
+
+% include the left arrow into a tikz picture
+% param1: fill color
+%
+\newcommand{\larrow}[1]
+{\begin{tikzpicture}[scale=0.58]
+	 \filldraw[fill=#1!100,draw=#1!100!black]  \tzlarrow
+ \end{tikzpicture}
+}
+
+% a six pointed arrow poiting to the right
+\newcommand{\tzrarrow}{ (0,0.2) -- (0.1,0) -- (0.3,0) -- (0.2,0.2) -- (0.3,0.4) -- (0.1,0.4) -- cycle;}
+
+% include the right arrow into a tikz picture
+% param1: fill color
+%
+\newcommand{\rarrow}
+{\begin{tikzpicture}[scale=0.7]
+	\filldraw[fill=sectcol!100,draw=sectcol!100!black] \tzrarrow
+ \end{tikzpicture}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	custom sections
+%----------------------------------------------------------------------------------------
+
+% create a coloured box with arrow and title as cv section headline
+% param 1: section title
+%
+\newcommand{\cvsection}[1]
+{
+\colorbox{mycol}{\mystrut \makebox[1\linewidth][l]{
+\larrow{bgcol} \hspace{-8pt} \larrow{bgcol} \hspace{-8pt} \larrow{bgcol} \textcolor{black}{\textbf{#1}}\hspace{4pt}
+}}\\
+}
+
+%create a coloured arrow with title as cv meta section section
+% param 1: meta section title
+%
+\newcommand{\metasection}[2]
+{
+\begin{tabular*}{1\textwidth}{p{2.4cm} p{11cm}}
+\larrow{bgcol}	\normalsize{\textcolor{bgcol}{#1}}&#2\\[8pt]
+\end{tabular*}
+}
+
+%----------------------------------------------------------------------------------------
+%	 CV EVENT
+%----------------------------------------------------------------------------------------
+
+% creates a stretched box as cv entry headline followed by two paragraphs about 
+% the work you did
+% param 1:	event time i.e. 2014 or 2011-2014 etc.
+% param 2:	event name (what did you do?)
+% param 3:	institution (where did you work / study)
+% param 4:	what was your position
+% param 5:	some words about your contributions
+%
+\newcommand{\cvevent}[5]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+
+	\end{tabular*}
+\vspace{-12pt}
+\textcolor{softcol}{\hrule}
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #4\\[3pt]
+&		 \larrow{bgcol}  #5\\[6pt]
+
+	\end{tabular*}
+}
+
+\newcommand{\cveventLANG}[5]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+
+	\end{tabular*}
+\vspace{-12pt}
+\textcolor{softcol}{\hrule}
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #4\\[3pt]
+
+	\end{tabular*}
+}
+
+
+\newcommand{\cveventhead}[1]
+{
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #1\\[3pt]
+	\end{tabular*}
+}
+
+\newcommand{\cveventheadmy}[2]
+{
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+\larrow{bgcol}	\normalsize{\textcolor{bgcol}{#1}}&#2\\[12pt]
+	\end{tabular*}
+}
+
+\newcommand{\cveventheadmulti}[1]
+{
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #1\\[3pt]
+&		 #1\\[3pt]
+&		 #1\\[3pt]
+	\end{tabular*}
+}
+
+
+\newcommand{\cveventline}[2]
+{
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 #1\\[3pt]
+&		 #2\\[3pt]
+	\end{tabular*}
+}
+
+\newcommand{\cveventsection}[3]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+	\end{tabular*}
+\textcolor{softcol}{\hrule}
+}
+
+\newcommand{\cveventlong}[9]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+
+	\end{tabular*}
+\vspace{-12pt}
+\textcolor{softcol}{\hrule}
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #4\\[3pt]
+&		 #5\\[3pt]
+&		 #6\\[3pt]
+&		 #7\\[3pt]
+&		 #8\\[3pt]
+&		 #9\\[3pt]
+	\end{tabular*}
+
+}
+
+\newcommand{\cveventmid}[7]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+
+	\end{tabular*}
+\vspace{-12pt}
+\textcolor{softcol}{\hrule}
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #4\\[3pt]
+&		 \larrow{bgcol}  #5\\[3pt]
+&		 \larrow{bgcol}  #6\\[3pt]
+&		 \larrow{bgcol}  #7\\[3pt]
+	\end{tabular*}
+
+}
+
+
+\newcommand{\cveventmids}[6]
+{
+\vspace{8pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm}  p{10.8cm} x{3.9cm}}
+ \textcolor{bgcol}{#1}& \textbf{#2} & \vspace{2.5pt}\textcolor{black}{#3}
+
+	\end{tabular*}
+\vspace{-12pt}
+\textcolor{softcol}{\hrule}
+\vspace{6pt}
+	\begin{tabular*}{1\textwidth}{p{2.3cm} p{14.4cm}}
+&		 \larrow{bgcol}  #4\\[3pt]
+&		 \larrow{bgcol}  #5\\[3pt]
+&		 \larrow{bgcol}  #6\\[3pt]
+	\end{tabular*}
+
+}
+
+% creates a stretched box as 
+\newcommand{\cveventmeta}[2]
+{
+	\mbox{\mystrut \hspace{87pt}\textit{#1}}\\
+	#2
+}
+
+%----------------------------------------------------------------------------------------
+% CUSTOM STRUT FOR EMPTY BOXES
+%----------------------------------------- -----------------------------------------------
+\newcommand{\mystrut}{\rule[-.3\baselineskip]{0pt}{\baselineskip}}
+
+%----------------------------------------------------------------------------------------
+% CUSTOM LOREM IPSUM
+%----------------------------------------------------------------------------------------
+\newcommand{\lorem}
+{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.}
+
+
+
+%============================================================================%
+%
+%
+%
+%	DOCUMENT CONTENT
+%
+%
+%
+%============================================================================%
+\begin{document}
+
+
+%use our custom fancy header definitions
+\pagestyle{fancy}	
+
+
+%---------------------------------------------------------------------------------------
+%	TITLE HEADLINE
+%----------------------------------------------------------------------------------------
+\vspace{-20.55pt}
+
+% use this for multiple words like working titles etc.
+%\hspace{-0.25\linewidth}\colorbox{bgcol}{\makebox[1.5\linewidth][c]{\hspace{46pt}\HUGE{\textcolor{white}{\textsc{Jan Küster}} } \textcolor{sectcol}{\rule[-1mm]{1mm}{0.9cm}} \parbox[b]{5cm}{   \large{ \textcolor{white}{{IT Consultant}}}\\
+% \large{ \textcolor{white}{{Resume}}}}
+%}}
+
+% use this for single words, e.g. CV or RESUME etc.
+\hspace{-0.25\linewidth}\colorbox{softcol}{\makebox[1.5\linewidth][c]{\HUGE{\textcolor{black}{\textsc{Antonio Di Salvo}} } }}
+
+
+%----------------------------------------------------------------------------------------
+%	HEADER IMAGE
+%----------------------------------------------------------------------------------------
+
+%\begin{figure}[H]
+%\begin{flushright}
+%	\includegraphics[trim= 320 130 460 210,clip,width=0.2\linewidth]{myfoto.jpg}	%trimming relative to image size!
+%\end{flushright}
+%\end{figure}
+
+% MY QR CODE TBD
+\begin{figure}[H]
+\begin{flushright}
+	\includegraphics[clip,width=103pt]{qart.png}	
+	   \vspace{0.1cm}
+\end{flushright}
+\end{figure}
+
+%---------------------------------------------------------------------------------------
+%	QR CODE (optional)
+%----------------------------------------------------------------------------------------
+%\vspace{-136pt}
+%\hspace{0.75\linewidth}
+%\includegraphics[width=103pt]{qrcode}
+%\normalsize
+%\vspace{88pt}
+
+%---------------------------------------------------------------------------------------
+%	META SECTION
+%----------------------------------------------------------------------------------------
+
+\vspace{-114pt}
+
+\metasection{Position}{Senior Consultant}
+\metasection{Field}{IT Consulting} 
+\metasection{Tech}{Linux, Kubernetes, Azure, Shell Scripting, TypeScript, Java}
+\metasection{Contacts}{disalvo.antonio@gmail.com \fancysep (+39) 389 470 91 58} 
+%\metasection{Loves:}{Challenges, Deep understanding of the matter at hand}
+
+\vspace{3pt}
+
+%---------------------------------------------------------------------------------------
+%	SUMMARAY (optional)
+%----------------------------------------------------------------------------------------
+
+\cvsection{Summary}\\
+I am an entrepreneur and IT consultant with more than 10 years of experience and a track record of projects in different sectors. I also share a passion for teaching and my main areas of interest are Linux, Kubernetes and Open Source. My current focus is on DevOps methodologies and tooling. I have a strong commitment to build solutions that are technologically sound and sustainable. I highly value a deep and clear understanding of technology, systems and people in order to be successful.\\
+
+%============================================================================%
+%	CV SECTIONS AND EVENTS (MAIN CONTENT)
+%============================================================================%
+
+%---------------------------------------------------------------------------------------
+%	EXPERIENCE
+%----------------------------------------------------------------------------------------
+\cvsection{Experience}
+%
+
+\cveventsection{2022 – }{Teacher}{SdI S.R.L.}
+\cveventheadmy{Sector}
+{Further Education}
+\cveventheadmy{
+Duties}{Teaching, Grading \fancysep  
+Exercise Preparation \fancysep
+Workshops
+}
+\cveventheadmy{Tech}
+{
+DevOps \fancysep
+Linux \fancysep 
+Docker \fancysep 
+Kubernetes \fancysep 
+Shell Scripting \fancysep 
+Java \fancysep
+Spring \fancysep
+Javascript/TypeScript \fancysep 
+Node.js \fancysep
+React \fancysep
+Git \fancysep
+}
+
+\cveventsection{2021 – }{CEO and Co-Founder, Senior Developer}{PDP Tanuki S.R.L.}
+\cveventheadmy{Sector}
+{Media, Telco}
+\cveventheadmy{
+Duties}{Business Administration \fancysep Continuous Integration, Quality and Delivery \fancysep  
+DevOps Methodology Implementation \fancysep
+Javascript/TypeScript development \fancysep
+Release and Configuration Management \fancysep
+}
+\cveventheadmy{Tech}
+{
+MS Azure DevOps \fancysep
+Linux \fancysep 
+Docker \fancysep 
+GitLab \fancysep 
+Shell Scripting \fancysep 
+TypeScript \fancysep 
+Node.js \fancysep
+React \fancysep 
+HbbTv \fancysep
+Git \fancysep
+}
+
+%
+\cveventsection{2019 – 2021}{Senior Consultant}{Capgemini}
+\cveventheadmy{Sector}
+{Banking, Retail, Telco}
+\cveventheadmy{
+Duties}{Cloud Migration \fancysep Infrastructure Support Team Lead \fancysep On-prem HA Cluster Sizing, Installation, Administration and Monitoring \fancysep 
+Continuous Integration, Quality and Delivery \fancysep  
+API Management \fancysep
+DevOps Methodology Implementation \fancysep
+Microservices Architecture and Development \fancysep 
+Release and Configuration Management \fancysep 
+System Integration
+}
+\cveventheadmy{Tech}
+{
+MS Azure \fancysep
+Linux (RHEL) \fancysep 
+Docker \fancysep 
+Kubernetes \fancysep 
+OpenShift \fancysep
+Grafana \fancysep
+Prometheus \fancysep
+Istio \fancysep 
+Jenkins \fancysep 
+SonarQube \fancysep 
+Checkmarx \fancysep
+Maven \fancysep 
+Java \fancysep 
+SpringBoot \fancysep
+Python \fancysep 
+Shell Scripting \fancysep 
+WSO2 API Manager \fancysep 
+OpenAPI \fancysep 
+Azure DevOps \fancysep
+Terraform \fancysep
+Ansible \fancysep
+Git \fancysep
+Splunk
+}
+
+%\textcolor{softcol}{\hrule}
+
+%
+\cveventsection{2016 – 2019}{Consultant}{Capgemini}
+\cveventheadmy{Sector}{Banking, Telco}
+\cveventheadmy{
+Duties}
+{System Integration Team Lead \fancysep
+SOA Architecture Implementation\fancysep
+ESB Integration \fancysep
+DevOps Methodology Implementation \fancysep
+Shell Scripting \fancysep 
+System Administration \fancysep
+Database Operation and Administration \fancysep
+Release and Configuration Management
+}
+\cveventheadmy{Tech}{
+Linux (RHEL) \fancysep 
+Solaris \fancysep 
+Oracle RDBMS \fancysep 
+Docker \fancysep
+Jenkins \fancysep 
+Maven \fancysep 
+Shell Scripting \fancysep 
+SVN \fancysep
+Ansible \fancysep
+RedHat Fuse \fancysep
+}
+
+%\textcolor{softcol}{\hrule}
+
+%
+\cveventsection{2014 – 2016}{Analyst Consultant}{Capgemini}
+\cveventheadmy{Sector}{Telco}
+\cveventheadmy{Duties}{
+Web Application Development \fancysep
+System Administration \fancysep
+Database Operations
+}
+\cveventheadmy{Tech}{
+Linux \fancysep 
+Solaris \fancysep 
+Oracle RDBMS \fancysep 
+Shell Scripting (POSIX, bash) \fancysep 
+Java \fancysep 
+Jboss \fancysep
+Javascript \fancysep 
+XHTML
+}
+
+%\textcolor{softcol}{\hrule}
+
+
+
+\cveventsection{2012 - 2014}{Junior Developer \& Support Engineer}{AVens S.R.L / ATS S.R.L.}
+\cveventheadmy{Sector}{Banking, Telco}
+\cveventheadmy{Duties}{
+HA Cluster Administration and monitoring \fancysep
+Software development for mobile systems \fancysep
+System Integration
+}
+\cveventheadmy{Tech}{
+RHEL Cluster Suite \fancysep
+Nagios \fancysep
+Android SDK \fancysep
+Java \fancysep
+EJB \fancysep
+Perl \fancysep
+Shell Scripting (POSIX) \fancysep
+SNMP \fancysep
+Oracle RDBMS
+}
+
+%\textcolor{softcol}{\hrule}
+
+
+%---------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%--------------------------------------------------------------------------------------
+\cvsection{Skills and Interests}
+
+%
+%\textcolor{softcol}{\hrule}
+%
+\cveventsection{\fancysep}{Hard Skills}{}
+\cveventheadmy{Languages}{shell scripting (POSIX, bash), sed/awk, Python, SQL, Java, Javascript/TypeScript}
+
+\cveventheadmy{OS}{Linux (RHEL, Debian, Slackware, Void), FreeBSD, Solaris}
+
+\cveventheadmy{Tools}{emacs, vi, git, Ansible, Docker, K8S}
+
+\cveventsection{\fancysep}{Soft Skills}{}
+\cveventheadmy{Team Work}{Managed small engineering teams (< 5). I'm self-organized, proactive and I love to play for the team.
+I work under pressure and adapt quickly to shifting priorities.}
+\cveventheadmy{Approach}{I believe that understanding people and organizations is key to a successful project and this can be better achieved by being a good team player. Understanding and cooperation is fundamental to me, as it is putting myself to the fullest possible use.}
+
+
+\cveventsection{\fancysep}{Language Skills}{}
+\cveventheadmy{English}{Full professional proficiency}
+\cveventheadmy{French}{Limited working proficiency}
+
+%-------------------------------------------------------------------------------------------------
+%	ARTIFICIAL FOOTER (fancy footer cannot exceed linewidth) 
+%--------------------------------------------------------------------------------------------------
+
+%\null
+%\vspace*{\fill}
+%\hspace{-0.25\linewidth}\colorbox{bgcol}{\makebox[1.5\linewidth][c]{\mystrut \small \textcolor{white}{www.nodomain.com} $\cdot$ %\textcolor{white}{github.com/pierpaciugo}}}
+
+
+
+%---------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%--------------------------------------------------------------------------------------
+\cvsection{Education}
+
+\cvevent{2008 - 2013}{Universita degli Studi di Palermo}{expected >= 108}{BSc in Computer Science}{Coursework complete}
+
+%\textcolor{softcol}{\hrule}
+
+%
+\cvevent{2003 / 2008}{IPCL}{100 cum Laude}{Language Diploma}{International Language school}
+
+%\textcolor{softcol}{\hrule}
+
+
+%-------------------------------------------------------------------------------------------------
+%	ARTIFICIAL FOOTER (fancy footer cannot exceed linewidth) 
+%--------------------------------------------------------------------------------------------------
+
+%\null
+%\vspace*{\fill}
+%\hspace{-0.25\linewidth}\colorbox{bgcol}{\makebox[1.5\linewidth][c]{\mystrut \small \textcolor{white}{www.nodomain.com} $\cdot$ %\textcolor{white}{github.com/pierpaciugo}}}
+
+
+
+
+%============================================================================%
+%
+%
+%
+%	DOCUMENT END
+%
+%
+%
+%============================================================================%
+\end{document}
+
+
